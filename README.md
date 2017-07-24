@@ -1,8 +1,14 @@
 # FaceDetected
 A project based on tensor flow running on raspberry that can detect face.
 
+## Requirements
+1. Raspberrypi 3
+2. Camera
+3. Speaker
+4. Python 3.5
+5. Lots of images of the target and others
+6. Put the images into data/target and others
+  
 ## Prepare environments
-1. Install anaconda:
-  https://conda.io/miniconda.html
-2. install flint:
+1. install flint:
   sudo apt-get install flint # for text to speech
