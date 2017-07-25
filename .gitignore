@@ -146,3 +146,4 @@ Temporary Items
 
 .ipynb_checkpoints/
 *.h5
+*.ipynb
