@@ -10,5 +10,6 @@ A project based on tensor flow running on raspberry that can detect face.
 6. Put the images into data/target and others
   
 ## Prepare environments
-1. install flint:
-  sudo apt-get install flint # for text to speech
+1. sudo apt-get install flint # for text to speech
+2. conda install -c https://conda.anaconda.org/menpo opencv3
+3. pip install requirements.txt
