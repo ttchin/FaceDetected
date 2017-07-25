@@ -13,7 +13,7 @@ from keras.utils import np_utils
 from keras.models import load_model
 from keras import backend as K
 
-from boss_input import extract_data, resize_with_pad, IMAGE_SIZE
+from FaceInput import extract_data, resize_with_pad, IMAGE_SIZE
 
 
 class Dataset(object):

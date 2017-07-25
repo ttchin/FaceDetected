@@ -1,17 +1,17 @@
-mport os
-import os.path 
+import os
+import os.path
 import cv2
 import numpy as np
 
 def detectFace(parent, imageName):
-    
+
     fileFullPath = os.path.join(parent,filename)
-    print("filename with full path:"+ fileFullPath)  
-    
-    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+    print("filename with full path:"+ fileFullPath)
+
+    face_cascade = cv2.CascadeClassifier('opencv_config/haarcascade_frontalface_default.xml')
     destImageDir="./dest/tiantian"
-    
-    
+
+
     img = cv2.imread(fileFullPath)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -27,16 +27,16 @@ def detectFace(parent, imageName):
 
 
 if __name__ == '__main__':
-    
-    sourceDir="./images/tian"  
-    for parent,dirnames,filenames in os.walk(sourceDir):  
-        for filename in filenames:    
-            #print("parent folder is:" + parent)  
+
+    sourceDir="./images/tian"
+    for parent,dirnames,filenames in os.walk(sourceDir):
+        for filename in filenames:
+            #print("parent folder is:" + parent)
             if(filename.endswith('.jpg')):
                 detectFace(parent,filename)
-            
-            
-            
-            
 
-   
+
+
+
+
+
