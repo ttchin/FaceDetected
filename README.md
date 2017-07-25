@@ -22,3 +22,5 @@ http://www.pyimagesearch.com/2016/04/18/install-guide-raspberry-pi-3-raspbian-je
 https://github.com/samjabrahams/tensorflow-on-raspberry-pi
 3. For keras:
 https://github.com/bitschift/brew.ai/wiki/Setting-up-the-Pi
+4. sudo python3.4 -m pip install sklearn
+5. sudo apt-get install python3-h5py
