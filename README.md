@@ -7,7 +7,8 @@ A project based on tensor flow running on raspberry that can detect face.
 1. Raspberrypi 3
 1. Camera
 1. Speaker
-1. Python 3.5
+1. Python 3.5 on Windows/MacOs, Python 3.4 on Raspberry
+1. ImageMagick <https://www.imagemagick.org/script/binary-releases.php>
 1. Lots of images of the target and others
 1. Put the images into data/target and others
 
