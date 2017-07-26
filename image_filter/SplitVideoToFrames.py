@@ -5,8 +5,8 @@ import os
 import cv2
 import cv
 
-videos_src_path = './videos'
-videos_save_path = './before'
+videos_src_path = '../videos'
+videos_save_path = '../before'
 
 videos = os.listdir(videos_src_path)
 videos = filter(lambda x: x.endswith('h264'), videos)

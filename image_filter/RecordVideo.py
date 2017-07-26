@@ -4,7 +4,7 @@ import datetime as dt
 import picamera
 import random
 
-destination = './videos'
+destination = '../videos'
 camera = picamera.PiCamera()
 camera.vflip = True
 
