@@ -9,7 +9,7 @@ def detectFace(parent, imageName):
     print("filename with full path:"+ fileFullPath)
 
     face_cascade = cv2.CascadeClassifier('opencv_config/haarcascade_frontalface_default.xml')
-    destImageDir="./dest/tiantian"
+    destImageDir="./dest"
 
 
     img = cv2.imread(fileFullPath)
@@ -28,7 +28,7 @@ def detectFace(parent, imageName):
 
 if __name__ == '__main__':
 
-    sourceDir="./images/tian"
+    sourceDir="./source"
     for parent,dirnames,filenames in os.walk(sourceDir):
         for filename in filenames:
             #print("parent folder is:" + parent)
