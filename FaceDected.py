@@ -1,3 +1,4 @@
+#! encoding: UTF-8
 import cv2
 import sys
 from FaceTrain import Model

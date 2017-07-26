@@ -40,3 +40,7 @@ A project based on tensor flow running on raspberry that can detect face.
 1. For keras:
 
 <https://github.com/bitschift/brew.ai/wiki/Setting-up-the-Pi>
+
+### Train models
+
+1. Put your images
