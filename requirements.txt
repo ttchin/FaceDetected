@@ -1,4 +1,3 @@
-h5py
-Keras
+keras
 sklearn
 tensorflow

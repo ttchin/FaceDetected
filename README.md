@@ -13,7 +13,9 @@ A project based on tensor flow running on raspberry that can detect face.
 ### Prefer to train models on PC:
 1. sudo apt-get install flint # for text to speech
 2. conda install -c https://conda.anaconda.org/menpo opencv3
-3. pip install requirements.txt
+3. conda install h5py
+4. conda install scipy
+5. pip install requirements.txt
 
 ### Install on raspberry
 1. For opencv:
