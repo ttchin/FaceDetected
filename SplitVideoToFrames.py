@@ -11,10 +11,13 @@ while True:
     # Our operations on the frame come here
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    cv2.imwrite("./image_filter/before/frame%d.jpg" % count, frame)     # save frame as JPEG file
+    cv2.imwrite("./image_filter/frame%d.jpg" % count, frame)     # save frame as JPEG file
     count += 1
 
     # Display the resulting frame
     #cv2.imshow('frame',gray)
-    if count > 100:
+    if count > 1:
+        cv2.destroyAllWindows()
         break
+
+cap.release()

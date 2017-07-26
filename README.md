@@ -8,7 +8,6 @@ A project based on tensor flow running on raspberry that can detect face.
 1. Camera
 1. Speaker
 1. Python 3.5 on Windows/MacOs, Python 3.4 on Raspberry
-1. ImageMagick <https://www.imagemagick.org/script/binary-releases.php>
 1. Lots of images of the target and others
 1. Put the images into data/target and others
 
@@ -30,17 +29,11 @@ A project based on tensor flow running on raspberry that can detect face.
 
 ### In raspberry, opencv only works on python 3.4**
 
-1. For opencv:
+1. For opencv:<http://www.pyimagesearch.com/2016/04/18/install-guide-raspberry-pi-3-raspbian-jessie-opencv-3/>
 
-<http://www.pyimagesearch.com/2016/04/18/install-guide-raspberry-pi-3-raspbian-jessie-opencv-3/>
+1. For tensorflow:<https://github.com/samjabrahams/tensorflow-on-raspberry-pi>
 
-1. For tensorflow:
-
-<https://github.com/samjabrahams/tensorflow-on-raspberry-pi>
-
-1. For keras:
-
-<https://github.com/bitschift/brew.ai/wiki/Setting-up-the-Pi>
+1. For keras:<https://github.com/bitschift/brew.ai/wiki/Setting-up-the-Pi>
 
 ### Train models
 

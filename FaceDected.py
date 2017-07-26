@@ -6,7 +6,7 @@ from FaceTrain import Model
 
 def detectFace(picturePath):
     frame = cv2.imread(picturePath)
-    cascade_path = "./opencv_config/haarcascade_frontalface_default.xml"
+    cascade_path = "opencv_config/haarcascade_frontalface_default.xml"
     model = Model()
     model.load()
 
