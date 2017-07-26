@@ -1,15 +1,18 @@
+#! encoding: UTF-8
 import os
 import os.path
 import cv2
+import sys
 import numpy as np
 
-def detectFace(parent, imageName):
+def detectFace(parent, filename):
 
     fileFullPath = os.path.join(parent,filename)
     print("filename with full path:"+ fileFullPath)
 
     face_cascade = cv2.CascadeClassifier('opencv_config/haarcascade_frontalface_default.xml')
-    destImageDir="./dest/tiantian"
+    destImageDir=os.path.join(os.path.dirname(sys.argv[0]),'image_filter','after')
+    print(destImageDir)
 
 
     img = cv2.imread(fileFullPath)
@@ -20,15 +23,14 @@ def detectFace(parent, imageName):
     if len(faces) > 0:
         print('face detected in %s' % fileFullPath)
         for (x,y,w,h) in faces:
-            cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
-            convert = 'convert {0} -crop {1[2]}x{1[3]}+{1[0]}+{1[1]} {2}'.format(fileFullPath, (x,y,w,h), destImageDir+'/'+filename)
-            print(convert)
-            os.system(convert)
+            crop_img = img[y:y+h,x:x+w]
+            cv2.imwrite(os.path.join(destImageDir,filename),crop_img)
 
 
 if __name__ == '__main__':
 
-    sourceDir="./images/tian"
+    sourceDir=destImageDir=os.path.join(os.path.dirname(sys.argv[0]),'image_filter')
+    print(sourceDir)
     for parent,dirnames,filenames in os.walk(sourceDir):
         for filename in filenames:
             #print("parent folder is:" + parent)

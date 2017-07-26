@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#! encoding: UTF-8
 from __future__ import print_function
 import random
 
@@ -27,7 +27,7 @@ class Dataset(object):
         self.Y_test = None
 
     def read(self, img_rows=IMAGE_SIZE, img_cols=IMAGE_SIZE, img_channels=3, nb_classes=2):
-        images, labels = extract_data('./data/')
+        images, labels = extract_data('./train/')
         labels = np.reshape(labels, [-1])
         # numpy.reshape
         X_train, X_test, y_train, y_test = train_test_split(images, labels, test_size=0.3, random_state=random.randint(0, 100))
@@ -71,7 +71,7 @@ class Dataset(object):
 
 class Model(object):
 
-    FILE_PATH = './store/model.h5'
+    FILE_PATH = './model/model.h5'
 
     def __init__(self):
         self.model = None

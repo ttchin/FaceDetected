@@ -1,4 +1,0 @@
-h5py
-Keras
-sklearn
-tensorflow
