@@ -28,13 +28,34 @@ def detectFace(picturePath):
             else:
                 print('Not boss')
 
+def capturePicture():
+    cap = cv2.VideoCapture(0)
+    while True:
+        # Capture frame-by-frame
+        ret, frame = cap.read()
+
+        face_cascade = cv2.CascadeClassifier('opencv_config/haarcascade_frontalface_default.xml')
+        # Our operations on the frame come here
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+        faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+        if len(faces)> 0:
+            cv2.imwrite("tmpFaceImage.jpg", frame)     # save frame as JPEG file
+            cv2.destroyAllWindows()
+            break
+
+    return "tmpFaceImage.jpg"
+
 
 if __name__ == '__main__':
     args = sys.argv[:]
-    print (args)
-    if (len(args) != 2):
+    #print (args)
+    if (len(args) ==1):
+        detectFace(capturePicture())
+    elif (len(args) == 2):
+        detectFace(sys.argv[1])
+    else:
         print("Please input the path of the face picture, only 1 picture at a time")
         quit()
 
-    picturePath = sys.argv[1]
-    detectFace(picturePath)
+    
