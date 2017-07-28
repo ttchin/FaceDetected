@@ -1,6 +1,6 @@
 # FaceDetected
 
-A project based on tensor flow running on raspberry that can detect face.
+A project based on tensor flow running on Raspberry that can detect face.
 
 ## Requirements
 
@@ -42,8 +42,6 @@ A project based on tensor flow running on raspberry that can detect face.
 
 1. Put the images into ./image_filter, including yours and others.
 1. `python ImageFilter.py` will crop the face from your origin images into ./image_filter/after
-
-
 
 ## Train models
 

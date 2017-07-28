@@ -22,7 +22,6 @@ def detectFace(picturePath):
             x, y = rect[0:2]
             width, height = rect[2:4]
             image = frame[y - 10: y + height, x: x + width]
-            # cv2.imgshow(image)
             result = model.predict(image)
             if result == 0:  # boss
                 print('Clark is approaching')
