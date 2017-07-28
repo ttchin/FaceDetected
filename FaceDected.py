@@ -2,6 +2,8 @@
 import cv2
 import sys
 from FaceTrain import Model
+import os
+import time
 
 
 def detectFace(picturePath):
@@ -20,12 +22,20 @@ def detectFace(picturePath):
             x, y = rect[0:2]
             width, height = rect[2:4]
             image = frame[y - 10: y + height, x: x + width]
-            cv2.imgshow(image)
+            # cv2.imgshow(image)
             result = model.predict(image)
             if result == 0:  # boss
-                print('Boss is approaching')
+                print('Clark is approaching')
+                return "Clark"
+            elif result == 1:
+                print('Ye is approaching')
+                return "Ye"
+            elif result == 2:
+                print('Weijiao is approaching')
+                return "Weijiao"
             else:
-                print('Not boss')
+                print('Chao is approaching')
+                return "Chao"
 
 def capturePicture():
     cap = cv2.VideoCapture(0)
@@ -38,10 +48,12 @@ def capturePicture():
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         faces = face_cascade.detectMultiScale(gray, 1.3, 5)
-        if len(faces)> 0:
-            cv2.imwrite("tmpFaceImage.jpg", frame)     # save frame as JPEG file
+
+        if len(faces) > 0:
+            cv2.imwrite("tmpFaceImage.jpg", frame)  # save frame as JPEG file
             cv2.destroyAllWindows()
             break
+    cap.release()
 
     return "tmpFaceImage.jpg"
 
@@ -50,11 +62,9 @@ if __name__ == '__main__':
     args = sys.argv[:]
     #print (args)
     if (len(args) ==1):
-        detectFace(capturePicture())
+        results = detectFace(capturePicture())
     elif (len(args) == 2):
-        detectFace(sys.argv[1])
+        results = detectFace(sys.argv[1])
     else:
         print("Please input the path of the face picture, only 1 picture at a time")
         quit()
-
-    

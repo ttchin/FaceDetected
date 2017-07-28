@@ -26,7 +26,7 @@ class Dataset(object):
         self.Y_valid = None
         self.Y_test = None
 
-    def read(self, img_rows=IMAGE_SIZE, img_cols=IMAGE_SIZE, img_channels=3, nb_classes=2):
+    def read(self, img_rows=IMAGE_SIZE, img_cols=IMAGE_SIZE, img_channels=3, nb_classes=4):
         images, labels = extract_data('./train/')
         labels = np.reshape(labels, [-1])
         # numpy.reshape
@@ -76,7 +76,7 @@ class Model(object):
     def __init__(self):
         self.model = None
 
-    def build_model(self, dataset, nb_classes=2):
+    def build_model(self, dataset, nb_classes=4):
         self.model = Sequential()
 
         self.model.add(Convolution2D(32, 3, 3, border_mode='same', input_shape=dataset.X_train.shape[1:]))
@@ -106,7 +106,7 @@ class Model(object):
         # let's train the model using SGD + momentum (how original).
         sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
         self.model.compile(loss='categorical_crossentropy',
-                           optimizer=sgd,
+                           optimizer='rmsprop',
                            metrics=['accuracy'])
         if not data_augmentation:
             print('Not using data augmentation.')
