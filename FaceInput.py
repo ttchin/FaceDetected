@@ -3,7 +3,6 @@ import os
 
 import numpy as np
 import cv2
-from FaceDected import getClassifyList
 
 IMAGE_SIZE = 64
 
@@ -70,3 +69,10 @@ def extract_data(path):
     # labels = np.array([0 if label.endswith('boss') else 1 for label in labels])
     labels = np.array(arrayResults)
     return images, labels
+
+def getClassifyList():
+    array = []
+    for dir in os.listdir("train"):
+        array.append(dir)
+    print(array)
+    return enumerate(array)

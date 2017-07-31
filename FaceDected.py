@@ -2,7 +2,7 @@
 import cv2
 import sys
 from FaceTrain import Model
-import os
+from FaceInput import getClassifyList
 
 
 def detectFace(picturePath):
@@ -46,13 +46,6 @@ def capturePicture():
     cap.release()
 
     return "tmpFaceImage.jpg"
-
-def getClassifyList():
-    array = []
-    for dir in os.listdir("train"):
-        array.append(dir)
-    print(array)
-    return enumerate(array)
 
 
 if __name__ == '__main__':
