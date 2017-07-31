@@ -20,18 +20,15 @@ def capturePicturesByCamera(num = 300, saveDir = "./image_filter/"):
         * Handling of file path construction.
         * Disable logging of cv2.
     """
-
-    cap = cv2.VideoCapture(0)
     face_cascade = cv2.CascadeClassifier('opencv_config/haarcascade_frontalface_default.xml')
+    cap = cv2.VideoCapture(0)
+
     count = 1
 
     while True:
 
         # Capture frame-by-frame
         ret, frame = cap.read()
-
-        # Display the captured frame
-        cv2.imshow('Camera', frame)
 
         # Detect faces in the gray frame
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -48,6 +45,9 @@ def capturePicturesByCamera(num = 300, saveDir = "./image_filter/"):
         # Draw rectangles which point out the faces
         for (x, y, w, h) in faces:
             cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+
+        # Display the captured frame
+        cv2.imshow('Camera', frame)
 
         # Wait for 'q' on the Camera window to quit before entire capturing job finished
         if cv2.waitKey(1) & 0xFF == ord('q'):

@@ -64,15 +64,6 @@ def extract_data(path):
     images = np.array(images)
     arrayResults = []
     for label in labels:
-    #     if label.endswith("Clark"):
-    #         arrayResults.append(0)
-    #     elif label.endswith("Ye"):
-    #         arrayResults.append(1)
-    #     elif label.endswith("Weijiao"):
-    #         arrayResults.append(2)
-    #     elif label.endswith("Chao"):
-    #         arrayResults.append(3)
-
         for name, member in Classify.__members__.items():
             if label.endswith(name):
                 arrayResults.append(member.value -1)
