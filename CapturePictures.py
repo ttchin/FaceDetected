@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import cv2
-import sys
+import os
 import argparse
 
 def capturePicturesByCamera(num = 300, saveDir = "./image_filter/"):
@@ -68,6 +68,9 @@ if __name__ == '__main__':
     parser.add_argument('-d', type=str, help='the directory to save the captured pictures. Default: "./image_filter/". Note: Please make sure the directory has been created')
     parser.set_defaults(n = 300, d = "./image_filter/")
     args = parser.parse_args()
+
+    if not os.path.exists("./image_filter"):
+        os.makedirs('image_filter/after')
 
     # Start the capturing
     capturePicturesByCamera(args.n, args.d)
