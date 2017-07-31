@@ -147,3 +147,6 @@ Temporary Items
 .ipynb_checkpoints/
 *.h5
 *.ipynb
+
+# Visual Studio Code
+.vscode/
