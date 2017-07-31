@@ -2,9 +2,7 @@
 import cv2
 import sys
 from FaceTrain import Model
-from PreparePicturesForTraining import Classify
 import os
-import time
 
 
 def detectFace(picturePath):
@@ -24,10 +22,10 @@ def detectFace(picturePath):
             width, height = rect[2:4]
             image = frame[y - 10: y + height, x: x + width]
             result = model.predict(image)
-            for name, member in Classify.__members__.items():
-                if result == (member.value -1):
-                    print("%s is appoaching" % name)
-                    return name
+            for i, item in getClassifyList():
+                if result == i:
+                    print("%s is appoaching" % item)
+                    return item
 
 def capturePicture():
     cap = cv2.VideoCapture(0)
@@ -48,6 +46,13 @@ def capturePicture():
     cap.release()
 
     return "tmpFaceImage.jpg"
+
+def getClassifyList():
+    array = []
+    for dir in os.listdir("train"):
+        array.append(dir)
+    print(array)
+    return enumerate(array)
 
 
 if __name__ == '__main__':

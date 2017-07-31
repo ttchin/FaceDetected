@@ -3,7 +3,7 @@ import os
 
 import numpy as np
 import cv2
-from PreparePicturesForTraining import Classify
+from FaceDected import getClassifyList
 
 IMAGE_SIZE = 64
 
@@ -64,9 +64,9 @@ def extract_data(path):
     images = np.array(images)
     arrayResults = []
     for label in labels:
-        for name, member in Classify.__members__.items():
-            if label.endswith(name):
-                arrayResults.append(member.value -1)
+        for i, item in getClassifyList():
+            if label.endswith(item):
+                arrayResults.append(i)
     # labels = np.array([0 if label.endswith('boss') else 1 for label in labels])
     labels = np.array(arrayResults)
     return images, labels
