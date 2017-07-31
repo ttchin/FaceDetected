@@ -1,14 +1,14 @@
-from SplitVideoToFrames import slitPictures
+from CapturePictures import capturePicturesByCamera
 import sys
 import os
 
 if __name__ == '__main__':
     args = sys.argv[:]
     if len(args) == 1:
-        slitPictures()
+        capturePicturesByCamera()
         os.system("python ImageFilter.py")
     elif len(args) == 2 and args[1] == "split":
-        slitPictures()
+        capturePicturesByCamera()
     elif len(args) == 2 and args[1] == "filter":
         os.system("python ImageFilter.py")
     else:
