@@ -16,7 +16,7 @@ A project based on tensor flow running on Raspberry that can detect face.
 ### In windows and macos, opencv only works on python 3.5
 
 1. `conda create -n 3.5.2 python=3.5.2`
-1. `source activate 3.5.2`
+1. `source activate 3.5.2` for Linux/MacOS or `activate 3.5.2` for Windows
 1. `conda install -c https://conda.anaconda.org/menpo opencv3`
 1. `conda install h5py`
 1. `conda install scipy`
@@ -34,14 +34,15 @@ A project based on tensor flow running on Raspberry that can detect face.
 
 ## Prepare images
 
-### Capture images from the video stream
+### Capture pictures and crop faces from the camera video stream
 
-`python SplitVideoToFrames.py` will capture 100 face frames from the camera.
+e.g. `python CapturePictures.py -n 50`
+`python CapturePictures.py -h` will give you more information.
 
-### Crop face from the pictures
+### Or crop faces from the existing pictures
 
-1. Put the images into ./image_filter, including yours and others.
-1. `python ImageFilter.py` will crop the face from your origin images into ./image_filter/after
+e.g. `python CropFaces.py -d ./captured_pictures/`
+`python CropFaces.py -h` will give you more information.
 
 ## Train models
 

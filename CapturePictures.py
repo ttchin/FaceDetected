@@ -8,20 +8,22 @@ import os
 import argparse
 import cv2
 
-def capture_pictures_by_camera(num=200, save_dir="./captured_pictures"):
+def capture_pictures_by_camera(num=200, save_dir="./captured_pictures", face_cropping=True):
 
     """
-    Capture pictures with faces detected and the cropped face images will be saved under "cropped_faces" folder.
+    Capture pictures with faces detected and the cropped face images will be saved under "cropped_faces" folder if face cropping function is enabled.
 
     Args:
         num (int): The number of pictures to capture. Default: 200
         save_dir (str): The directory to save the captured pictures. Default: "./captured_pictures/"
+        face_cropping (bool): If enable face cropping and save the cropped face images under "cropped_faces" folder. Default: True
 
     Returns:
         void
 
     Todo:
         * Disable logging of cv2.
+        * Add interval between 2 captures.
     """
 
     cap = cv2.VideoCapture(0)
@@ -51,23 +53,26 @@ def capture_pictures_by_camera(num=200, save_dir="./captured_pictures"):
 
             print("%d picture(s) captured & saved!" % frame_index)
             frame_index += 1
-
+            
+            face_index = 1
             for (x, y, w, h) in faces:
-                face_index = 1
+                
+                if face_cropping:
+                    face_file_dir = os.path.join(save_dir, "cropped_faces")
+                    if not os.path.exists(face_file_dir):
+                        os.mkdir(face_file_dir)
+
+                    face_file_name_with_ext = frame_file_name + ("-face%d" % face_index) + jpg_file_ext
+                    face_file_path = os.path.join(face_file_dir, face_file_name_with_ext)
+
+                    # Save cropped face as JPEG file
+                    face = frame[y:y+h, x:x+w]
+                    cv2.imwrite(face_file_path, face)
 
                 # Draw rectangles which point out the faces
                 cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
-                face_file_dir = os.path.join(save_dir, "cropped_faces")
-                if not os.path.exists(face_file_dir):
-                    os.mkdir(face_file_dir)
-
-                face_file_name_with_ext = frame_file_name + ("-face%d" % face_index) + jpg_file_ext
-                face_file_path = os.path.join(face_file_dir, face_file_name_with_ext)
-
-                # Save cropped face as JPEG file
-                face = frame[y:y+h, x:x+w]
-                cv2.imwrite(face_file_path, face)
+                face_index += 1
 
         # Display the captured frame
         cv2.imshow('Camera', frame)
@@ -97,8 +102,5 @@ if __name__ == '__main__':
     parser.set_defaults(n = 200, d = "./captured_pictures")
     args = parser.parse_args()
 
-    if not os.path.exists("./image_filter"):
-        os.makedirs('image_filter/after')
-
-    # Start the capturing
-    capture_pictures_by_camera(args.n, args.d)
+    # Start capturing
+    capture_pictures_by_camera(args.n, args.d, True)
