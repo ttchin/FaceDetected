@@ -2,6 +2,7 @@
 import cv2
 import sys
 from FaceTrain import Model
+from PreparePicturesForTraining import Classify
 import os
 import time
 
@@ -23,18 +24,10 @@ def detectFace(picturePath):
             width, height = rect[2:4]
             image = frame[y - 10: y + height, x: x + width]
             result = model.predict(image)
-            if result == 0:  # boss
-                print('Clark is approaching')
-                return "Clark"
-            elif result == 1:
-                print('Ye is approaching')
-                return "Ye"
-            elif result == 2:
-                print('Weijiao is approaching')
-                return "Weijiao"
-            else:
-                print('Chao is approaching')
-                return "Chao"
+            for name, member in Classify.__members__.items():
+                if result == (member.value -1):
+                    print("%s is appoaching" % name)
+                    return name
 
 def capturePicture():
     cap = cv2.VideoCapture(0)
