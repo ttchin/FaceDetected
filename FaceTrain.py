@@ -14,7 +14,7 @@ from keras.models import load_model
 from keras import backend as K
 
 from FaceInput import extract_data, resize_with_pad, IMAGE_SIZE
-
+import os
 
 class Dataset(object):
 
@@ -26,7 +26,7 @@ class Dataset(object):
         self.Y_valid = None
         self.Y_test = None
 
-    def read(self, img_rows=IMAGE_SIZE, img_cols=IMAGE_SIZE, img_channels=3, nb_classes=4):
+    def read(self, nb_classes, img_rows=IMAGE_SIZE, img_cols=IMAGE_SIZE, img_channels=3):
         images, labels = extract_data('./train/')
         labels = np.reshape(labels, [-1])
         # numpy.reshape
@@ -76,7 +76,7 @@ class Model(object):
     def __init__(self):
         self.model = None
 
-    def build_model(self, dataset, nb_classes=4):
+    def build_model(self, dataset, nb_classes):
         self.model = Sequential()
 
         self.model.add(Convolution2D(32, 3, 3, border_mode='same', input_shape=dataset.X_train.shape[1:]))
@@ -170,11 +170,16 @@ class Model(object):
         print("%s: %.2f%%" % (self.model.metrics_names[1], score[1] * 100))
 
 if __name__ == '__main__':
+    count = 0
+    for dir in os.listdir("train"):
+        count +=1
+    print("%d type objects need to be trained" % count)
+
     dataset = Dataset()
-    dataset.read()
+    dataset.read(count)
 
     model = Model()
-    model.build_model(dataset)
+    model.build_model(dataset,count)
     model.train(dataset, nb_epoch=10)
     model.save()
 

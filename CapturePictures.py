@@ -34,9 +34,6 @@ def capture_pictures_by_camera(num=200, save_dir="./captured_pictures"):
         # Capture frame-by-frame
         ret, frame = cap.read()
 
-        # Display the captured frame
-        cv2.imshow('Camera', frame)
-
         # Detect faces in the gray frame
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         faces = face_cascade.detectMultiScale(gray_frame, 1.3, 5)
@@ -72,6 +69,9 @@ def capture_pictures_by_camera(num=200, save_dir="./captured_pictures"):
                 face = frame[y:y+h, x:x+w]
                 cv2.imwrite(face_file_path, face)
 
+        # Display the captured frame
+        cv2.imshow('Camera', frame)
+
         # Wait for 'q' on the Camera window to quit before entire capturing job finished
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
@@ -96,6 +96,9 @@ if __name__ == '__main__':
     parser.add_argument('-d', type=str, help='the directory to save the captured pictures. Default: "./captured_pictures"')
     parser.set_defaults(n = 200, d = "./captured_pictures")
     args = parser.parse_args()
+
+    if not os.path.exists("./image_filter"):
+        os.makedirs('image_filter/after')
 
     # Start the capturing
     capture_pictures_by_camera(args.n, args.d)
