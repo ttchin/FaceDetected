@@ -16,7 +16,7 @@ A project based on tensor flow running on Raspberry that can detect face.
 ### In windows and macos, opencv only works on python 3.5
 
 1. `conda create -n 3.5.2 python=3.5.2`
-1. `activate 3.5.2`
+1. `source activate 3.5.2`
 1. `conda install -c https://conda.anaconda.org/menpo opencv3`
 1. `conda install h5py`
 1. `conda install scipy`
