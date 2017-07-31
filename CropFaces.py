@@ -53,7 +53,7 @@ def crop_faces_from_pictures(pic_dir):
                     face_index += 1
 
     print("==============================================================================")
-    print("Now you could get the captured pictures under directory: " + face_file_dir)
+    print("Now you could get the cropped face images under directory: " + face_file_dir)
     print("==============================================================================")
 
 
