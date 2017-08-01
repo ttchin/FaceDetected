@@ -27,6 +27,10 @@ def detect_faces_from_frame(frame):
             for index, name in getClassifyList():
                 if result == index:
                     print(">>> Aha, it's %s!" % name)
+                    while 1:
+                        if not pygame.mixer.music.get_busy():
+                            break
+
                     #return name
 
 
