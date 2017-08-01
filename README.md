@@ -36,13 +36,13 @@ A project based on tensor flow running on Raspberry that can detect face.
 
 ### Capture pictures and crop faces from the camera video stream
 
-e.g. `python CapturePictures.py -n 50`
-`python CapturePictures.py -h` will give you more information.
+* e.g. `python CapturePictures.py -n 50`
+* `python CapturePictures.py -h` will give you more information.
 
 ### Or crop faces from the existing pictures
 
-e.g. `python CropFaces.py -d ./captured_pictures/`
-`python CropFaces.py -h` will give you more information.
+* e.g. `python CropFaces.py -d ./captured_pictures/`
+* `python CropFaces.py -h` will give you more information.
 
 ## Train models
 
