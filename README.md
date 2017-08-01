@@ -47,9 +47,10 @@ A project based on tensor flow running on Raspberry that can detect face.
 
 ## Train models
 
-1. Put your cropped images and the other's images into train/boss and train/other respectively.
-1. `python FaceTrain.py` will generate a model into ./model
+1. Put the cropped face images of each person into different directories under "/train/", like "/train/Tony", "/train/Chao", "/train/Leo". Please note the folder name will be used as the person's name.
+1. `python FaceTrain.py` will generate a single model from all the given pictures into "./model".
 
-## Start face detected
+## Start face detection
 
-When the model is ready, `python FaceDeted.py` will capture a picture from the camera and identify if it's you or not.
+* When the model is ready, `python DetectFaces.py` will capture faces from the camera video stream and identify who it is.
+* `python DetectFaces.py -h` will give you more information.
