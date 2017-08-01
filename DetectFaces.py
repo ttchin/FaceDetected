@@ -11,6 +11,7 @@ model = Model()
 model.load()
 
 def detect_faces_from_frame(frame):
+    playMusic() #play funny music at the backend
     # Detect faces in the frame
     gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray_frame, 1.3, 5)
@@ -52,6 +53,14 @@ def detect_faces_from_camera_video_stream(exec_time=60):
 
     cv2.destroyAllWindows()
     cap.release()
+
+def playMusic():
+    # pygame.init()
+    pygame.mixer.init()
+    # screen = pygame.display.set_mode([640, 480])
+    pygame.time.delay(2000)
+    pygame.mixer.music.load("./dialog/tangbohu.mp3")
+    pygame.mixer.music.play()
 
 if __name__ == '__main__':
     # Parse the command line arguments
