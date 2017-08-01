@@ -29,6 +29,7 @@ def detectFace(picturePath):
         for rect in facerect:
             x, y = rect[0:2]
             width, height = rect[2:4]
+            # why y -10?
             image = frame[y - 10: y + height, x: x + width]
             result = model.predict(image)
             for i, item in getClassifyList():

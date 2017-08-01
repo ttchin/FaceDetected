@@ -5,6 +5,7 @@ Python script to capture pictures with faces detected.
 """
 
 import os
+import time
 import argparse
 import cv2
 
@@ -24,17 +25,24 @@ def capture_pictures_by_camera(num=200, save_dir="./captured_pictures", no_face_
 
     Todo:
         * Disable logging of cv2.
-        * Add interval between 2 captures.
     """
 
     cap = cv2.VideoCapture(0)
     face_cascade = cv2.CascadeClassifier('opencv_config/haarcascade_frontalface_default.xml')
     jpg_file_ext = ".jpg"
-    frame_index = 0
+    captured_frame_index = 0
+
+    # For calculation of FPS (frame per second)
+    frame_num = 0
+    time_start = time.time()
+
+    # Perform the capture every n frames
+    # Enlarge this value will increase the FPS
+    capture_every_n_frames = 4
 
     # Create directory for captured pictures if it's not existing
     if not os.path.exists(save_dir):
-                os.mkdir(save_dir)
+        os.mkdir(save_dir)
 
     # Create directory for cropped face images if it's not existing
     if not no_face_cropping:
@@ -43,45 +51,48 @@ def capture_pictures_by_camera(num=200, save_dir="./captured_pictures", no_face_
             os.mkdir(face_file_dir)
 
     while True:
-
         # Capture frame-by-frame
         ret, frame = cap.read()
+        frame_num += 1
 
-        # Detect faces in the gray frame
-        gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        faces = face_cascade.detectMultiScale(gray_frame, 1.3, 5)
+        # Only perform the capture every n frames
+        if frame_num % capture_every_n_frames == 0:
+            # Detect faces in the gray frame
+            gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            faces = face_cascade.detectMultiScale(gray_frame, 1.3, 5)
 
-        # The frame will be saved when the faces are detected
-        if len(faces) > 0:
-            frame_index += 1
-            print("%d picture(s) captured!" % frame_index)
+            # The frame will be saved when the faces are detected
+            if len(faces) > 0:
+                captured_frame_index += 1
+                print("%d picture(s) captured!" % captured_frame_index)
 
-            frame_file_name = "frame%d" % frame_index
+                frame_file_name = "frame%d" % captured_frame_index
 
-            # Save frame as JPEG file
-            if not no_capture_saving:
-                frame_file_name_with_ext = frame_file_name + jpg_file_ext
-                frame_file_path = os.path.join(save_dir, frame_file_name_with_ext)
-                cv2.imwrite(frame_file_path, frame)
+                # Save frame as JPEG file
+                if not no_capture_saving:
+                    frame_file_name_with_ext = frame_file_name + jpg_file_ext
+                    frame_file_path = os.path.join(save_dir, frame_file_name_with_ext)
+                    cv2.imwrite(frame_file_path, frame)
 
-            face_index = 1
-            for (x, y, w, h) in faces:
-                if not no_face_cropping:
-                    face_file_name_with_ext = frame_file_name + ("-face%d" % face_index) + jpg_file_ext
-                    face_file_path = os.path.join(face_file_dir, face_file_name_with_ext)
+                face_index = 1
+                for (x, y, w, h) in faces:
+                    if not no_face_cropping:
+                        face_file_name_with_ext = frame_file_name + ("-face%d" % face_index) + jpg_file_ext
+                        face_file_path = os.path.join(face_file_dir, face_file_name_with_ext)
 
-                    # Save cropped face as JPEG file
-                    face = frame[y:y+h, x:x+w]
-                    cv2.imwrite(face_file_path, face)
+                        # Save cropped face as JPEG file
+                        face = frame[y:y+h, x:x+w]
+                        cv2.imwrite(face_file_path, face)
 
-                # Draw rectangles which point out the faces
-                cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+                    # Draw rectangles which point out the faces
+                    cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
-                face_index += 1
+                    face_index += 1
 
         # Display the captured frame
         cv2.putText(frame, "Press 'q' to quit", (20,40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2)
-        cv2.putText(frame, ("%d picture(s) captured!" % frame_index), (20,80), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2)
+        cv2.putText(frame, ("FPS: %0.2f" % (frame_num / (time.time() - time_start))), (20,80), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2)
+        cv2.putText(frame, ("%d picture(s) captured!" % captured_frame_index), (20,120), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2)
         cv2.imshow('Camera', frame)
         
         # Wait for 'q' on the Camera window to quit before entire capturing job finished
@@ -89,7 +100,7 @@ def capture_pictures_by_camera(num=200, save_dir="./captured_pictures", no_face_
             cv2.destroyAllWindows()
             break
 
-        if frame_index >= num:
+        if captured_frame_index >= num:
             cv2.destroyAllWindows()
             break  
 
