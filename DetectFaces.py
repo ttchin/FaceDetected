@@ -2,7 +2,7 @@
 
 import time
 import argparse
-import pygame
+#import pygame
 from FaceTrain import Model
 from FaceInput import getClassifyList
 import cv2
@@ -12,7 +12,9 @@ model = Model()
 model.load()
 
 def detect_faces_from_frame(frame):
-    playMusic() #play funny music at the backend
+    # Play funny music at the backend
+    #playMusic() 
+
     # Detect faces in the frame
     gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray_frame, 1.3, 5)
@@ -27,11 +29,9 @@ def detect_faces_from_frame(frame):
             for index, name in getClassifyList():
                 if result == index:
                     print(">>> Aha, it's %s!" % name)
-                    while 1:
-                        if not pygame.mixer.music.get_busy():
-                            break
-
-                    #return name
+                    #while 1:
+                    #    if not pygame.mixer.music.get_busy():
+                    #        break
 
 
 def detect_faces_from_picture(pic_file_path):
@@ -59,6 +59,7 @@ def detect_faces_from_camera_video_stream(exec_time=60):
     cv2.destroyAllWindows()
     cap.release()
 
+"""
 def playMusic():
     # pygame.init()
     pygame.mixer.init()
@@ -66,6 +67,7 @@ def playMusic():
     pygame.time.delay(2000)
     pygame.mixer.music.load("./dialog/tangbohu.mp3")
     pygame.mixer.music.play()
+"""
 
 if __name__ == '__main__':
     # Parse the command line arguments
