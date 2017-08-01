@@ -2,6 +2,7 @@
 
 import time
 import argparse
+import pygame
 from FaceTrain import Model
 from FaceInput import getClassifyList
 import cv2
