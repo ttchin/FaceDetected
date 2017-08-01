@@ -73,6 +73,8 @@ def extract_data(path):
 def getClassifyList():
     array = []
     for dir in os.listdir("train"):
-        array.append(dir)
+        if not dir.startswith("."): # avoid hidden folder like .DS_Store
+            array.append(dir)
+            
     print(array)
     return enumerate(array)
