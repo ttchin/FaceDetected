@@ -125,7 +125,7 @@ if __name__ == '__main__':
 
     parser.add_argument('--no-capture-saving', action='store_const', default = 'False', const = 'True', dest='no_capture_saving', help='not to store the captured pictures to save time. Default: False')
 
-    parser.set_defaults(n= 00, d="./captured_pictures", no_face_cropping=False, no_capture_saving=False)
+    parser.set_defaults(n=200, d="./captured_pictures", no_face_cropping=False, no_capture_saving=False)
 
     args = parser.parse_args()
 

@@ -1,4 +1,10 @@
 #! encoding: UTF-8
+
+"""
+Todo:
+    * Avoid train on folder .DS_Store
+"""
+
 from __future__ import print_function
 import random
 
