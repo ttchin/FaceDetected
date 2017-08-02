@@ -11,9 +11,9 @@ face_cascade = cv2.CascadeClassifier('opencv_config/haarcascade_frontalface_defa
 model = Model()
 model.load()
 
-def detect_faces_from_frame(frame):
-    # Play funny music at the backend
-    #playMusic() 
+def detect_faces_from_picture(pic_file_path):
+    print(">>> Let me check this picture: " + pic_file_path)
+    frame = cv2.imread(pic_file_path)
 
     # Detect faces in the frame
     gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -22,41 +22,73 @@ def detect_faces_from_frame(frame):
     
     # Match the detected faces with the trained model
     if len(faces) > 0:
-        print(">>> Someone is out there!")
+        print(">>> Someone is in the picture!")
         for (x, y, w, h) in faces:
             face = frame[y:y+h, x:x+w]
             result = model.predict(face)
             for index, name in getClassifyList():
                 if result == index:
                     print(">>> Aha, it's %s!" % name)
-                    #while 1:
-                    #    if not pygame.mixer.music.get_busy():
-                    #        break
-
-
-def detect_faces_from_picture(pic_file_path):
-    print(">>> Let me take a look at this picture: " + pic_file_path)
-    frame = cv2.imread(pic_file_path)
-    detect_faces_from_frame(frame)
 
 
 def detect_faces_from_camera_video_stream(exec_time=60):
-    # Perform the capture every n seconds
-    capture_interval = 0.6
+    # Perform the detection every n seconds
+    detect_interval = 0.6
 
     cap = cv2.VideoCapture(0)
-    time_start = time.time()
+    exec_start = time.time()
+    interval_start = time.time()
+
+    # For calculation of FPS (frame per second)
+    frame_num = 0
+
+    detected_name = "World"
+
     while True:
-        # Capture frame-by-frame
-        ret, frame = cap.read()
-        detect_faces_from_frame(frame)
-
-        time.sleep(capture_interval)
-
-        if (time.time() - time_start > exec_time):
+        if time.time() - exec_start > exec_time:
             break
 
-    cv2.destroyAllWindows()
+        # Capture frame-by-frame
+        _, frame = cap.read()
+        frame_num += 1
+
+        if time.time() - interval_start > detect_interval:
+            interval_start = time.time()
+
+            # Detect faces in the frame
+            gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            faces = face_cascade.detectMultiScale(gray_frame, 1.3, 5)
+            #faces = face_cascade.detectMultiScale(gray_frame, scaleFactor=1.2, minNeighbors=3, minSize=(10, 10))
+            
+            # Match the detected faces with the trained model
+            if len(faces) > 0:
+                print(">>> Someone is out there!")
+                for (x, y, w, h) in faces:
+                    face = frame[y:y+h, x:x+w]
+
+                    # Draw rectangles which point out the faces
+                    cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+                    result = model.predict(face)
+                    for index, name in getClassifyList():
+                        if result == index:
+                            print(">>> Aha, it's %s!" % name)
+                            detected_name = name
+                            break
+
+        # Display the camero video
+        cv2.putText(frame, "Press 'q' to quit", (20, 40),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+        cv2.putText(frame, ("FPS: %0.2f" % (frame_num / (time.time() - exec_start))),
+                    (20, 80), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+        cv2.putText(frame, ("Hello, %s!" % detected_name), (20, 120), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+        cv2.imshow('Camera', frame)
+        
+        # Wait for 'q' on the Camera window to quit before entire capturing job finished
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            cv2.destroyAllWindows()
+            break
+
     cap.release()
 
 """
