@@ -107,7 +107,7 @@ class Model(object):
         # let's train the model using SGD + momentum (how original).
         sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
         self.model.compile(loss='categorical_crossentropy',
-                           optimizer='rmsprop',
+                           optimizer=sgd, #rmsprop
                            metrics=['accuracy'])
         if not data_augmentation:
             print('Not using data augmentation.')
@@ -170,6 +170,21 @@ class Model(object):
         score = self.model.evaluate(dataset.X_test, dataset.Y_test, verbose=0)
         print("%s: %.2f%%" % (self.model.metrics_names[1], score[1] * 100))
 
+    def getTrainCfg(self):
+        array=[]
+        with open("./model/train.cfg", 'r') as fread:
+            lines = fread.readlines()
+            for name in lines:
+                array.append(name.strip("\n"))
+        print(array)
+        return enumerate(array)
+
+    def generateTrainCfg(self):
+        with open("./model/train.cfg", "w+") as fwrite:
+            for dir in os.listdir("train"):
+                if not dir.startswith("."):  # avoid hidden folder like .DS_Store
+                    fwrite.write("{}\n".format(dir))
+
 if __name__ == '__main__':
     count = 0
     for dir in os.listdir("train"):
@@ -187,3 +202,4 @@ if __name__ == '__main__':
     model = Model()
     model.load()
     model.evaluate(dataset)
+    model.generateTrainCfg()

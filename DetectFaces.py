@@ -4,7 +4,6 @@ import time
 import argparse
 #import pygame
 from FaceTrain import Model
-from FaceInput import getClassifyList
 import cv2
 
 face_cascade = cv2.CascadeClassifier('opencv_config/haarcascade_frontalface_default.xml')
@@ -26,7 +25,7 @@ def detect_faces_from_picture(pic_file_path):
         for (x, y, w, h) in faces:
             face = frame[y:y+h, x:x+w]
             result = model.predict(face)
-            for index, name in getClassifyList():
+            for index, name in model.getTrainCfg():
                 if result == index:
                     print(">>> Aha, it's %s!" % name)
 
@@ -70,7 +69,7 @@ def detect_faces_from_camera_video_stream(exec_time=60):
                     cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
                     result = model.predict(face)
-                    for index, name in getClassifyList():
+                    for index, name in model.getTrainCfg():
                         if result == index:
                             print(">>> Aha, it's %s!" % name)
                             detected_name = name
