@@ -34,7 +34,7 @@ def crop_faces_from_pictures(pic_dir):
     pic_files = os.listdir(pic_dir)
     for pic_file in pic_files:
         # Only handle JPEG image files
-        if pic_file.endswith(jpg_file_ext):
+        if pic_file.lower().endswith(jpg_file_ext):
             pic = cv2.imread(os.path.join(pic_dir, pic_file))
             gray_pic = cv2.cvtColor(pic, cv2.COLOR_BGR2GRAY)
             faces = face_cascade.detectMultiScale(gray_pic, 1.3, 5)
@@ -46,7 +46,7 @@ def crop_faces_from_pictures(pic_dir):
                 face_index = 1
                 for (x, y, w, h) in faces:
                     face = pic[y:y + h, x:x + w]
-                    face_file_name_with_ext = pic_file.replace(
+                    face_file_name_with_ext = pic_file.lower().replace(
                         jpg_file_ext,
                         '') + ("-face%d" % face_index) + jpg_file_ext
                     face_file_path = os.path.join(face_file_dir,

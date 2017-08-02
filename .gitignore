@@ -143,6 +143,7 @@ Temporary Items
 
 *.jpg
 *.png
+*.db
 
 .ipynb_checkpoints/
 *.h5
