@@ -70,7 +70,7 @@ def detect_faces_from_camera_video_stream(exec_time=60):
             # Match the detected faces with the trained model
             if len(faces) == 1:
                 print(">>> Someone is out there!")
-                #otherFace()
+                otherFace()
                 isBoss = False
                 for (x, y, w, h) in faces:
                     face = frame[y:y+h, x:x+w]
@@ -96,7 +96,7 @@ def detect_faces_from_camera_video_stream(exec_time=60):
                                 if not isSamePeople:
                                     print(">>> Aha, it's %s!" % name)
                                     #subprocess.Popen(["espeak", "hello {}, have a nice day".format(name)])
-                                    subprocess.Popen(["flite", "-t", "hello {}, have a nice day".format(name)])
+                                    subprocess.Popen(["flite", "-t", "{}".format(name)])
                                 else:
                                     i = random.randint(0,len(sayHello)-1)
                                     #subprocess.Popen(["espeak", "{}".format(sayHello[i])])
@@ -132,7 +132,7 @@ def playAlert():
     alert_track += 1
 
 def otherFace():
-    array=["Hello","How are you","Good luck"]
+    array=["Hello","How are you","Good luck", "Hahaha", "Good afternoon", "Hey hey", "Lu lu lu", "Sa wa di ka", "Ah yi xi", "Ka wa yi","kou ni qi wa"]
     randomValue = random.randint(0,len(array)-1)
     #subprocess.Popen(["espeak", "{}".format(array[randomValue])])
     subprocess.Popen(["flite","-t", "{}".format(array[randomValue])])
