@@ -2,9 +2,10 @@
 
 import time
 import argparse
-#import pygame
+import pygame
 from FaceTrain import Model
 import cv2
+
 
 face_cascade = cv2.CascadeClassifier('opencv_config/haarcascade_frontalface_default.xml')
 model = Model()
@@ -29,6 +30,7 @@ def detect_faces_from_picture(pic_file_path):
                 if result == index:
                     print(">>> Aha, it's %s!" % name)
 
+is_playAlert = False
 
 def detect_faces_from_camera_video_stream(exec_time=60):
     # Perform the detection every n seconds
@@ -40,8 +42,11 @@ def detect_faces_from_camera_video_stream(exec_time=60):
 
     # For calculation of FPS (frame per second)
     frame_num = 0
+    alert_num = 0
 
     detected_name = "World"
+    bossName = "Leo"
+    alert_interval = 20
 
     while True:
         if time.time() - exec_start > exec_time:
@@ -62,6 +67,7 @@ def detect_faces_from_camera_video_stream(exec_time=60):
             # Match the detected faces with the trained model
             if len(faces) == 1:
                 print(">>> Someone is out there!")
+                isBoss = False
                 for (x, y, w, h) in faces:
                     face = frame[y:y+h, x:x+w]
 
@@ -74,6 +80,12 @@ def detect_faces_from_camera_video_stream(exec_time=60):
                             if label == index:
                                 print(">>> Aha, it's %s!" % name)
                                 detected_name = name
+                                alert_interval = 20
+                                alert_start = 0
+                                if detected_name == bossName and alert_num < 3 and time.time() - alert_start > alert_interval:
+                                    alert_start = time.time()
+                                    playAlert()
+                                    alert_num += 1
                                 break
             elif len(faces) > 1:
                 print("Too many people here, I am going to die!")
@@ -93,15 +105,14 @@ def detect_faces_from_camera_video_stream(exec_time=60):
 
     cap.release()
 
-"""
-def playMusic():
+def playAlert():
+    print("Boss is comming, Alert!!!")
     # pygame.init()
     pygame.mixer.init()
     # screen = pygame.display.set_mode([640, 480])
     pygame.time.delay(2000)
-    pygame.mixer.music.load("./dialog/tangbohu.mp3")
+    pygame.mixer.music.load("./dialog/4239.wav")
     pygame.mixer.music.play()
-"""
 
 if __name__ == '__main__':
     # Parse the command line arguments
