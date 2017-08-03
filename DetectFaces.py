@@ -81,12 +81,14 @@ def detect_faces_from_camera_video_stream(exec_time=60):
                         for index, name in model.getTrainCfg():
                             if label == index:
                                 print(">>> Aha, it's %s!" % name)
-                                subprocess.Popen(["flite","-t","hello {}".format(name)])
-                                detected_name = name
-                                if detected_name == bossName and alert_num < 3 and time.time() - alert_start > alert_interval:
-                                    alert_start = time.time()
-                                    playAlert()
-                                    alert_num += 1
+                                if not detected_name == name:
+                                    detected_name = name
+                                    if detected_name == bossName and alert_num < 3 and time.time() - alert_start > alert_interval:
+                                        alert_start = time.time()
+                                        playAlert()
+                                        alert_num += 1
+                                    else:
+                                        subprocess.Popen(["espeak", "hello {}, have a nice day".format(name)])
                                 break
             elif len(faces) > 1:
                 print("Too many people here, I am going to die!")
