@@ -13,6 +13,7 @@ face_cascade = cv2.CascadeClassifier('opencv_config/haarcascade_frontalface_defa
 model = Model()
 model.load()
 alert_track = 1
+sayHello=["Do you remember me", "I am trying to remember your name", "I think you are super star", "You looks great today", "I like your eyes", "God bless you", "Do you have free style"]
 
 def detect_faces_from_picture(pic_file_path):
     print(">>> Let me check this picture: " + pic_file_path)
@@ -69,7 +70,7 @@ def detect_faces_from_camera_video_stream(exec_time=60):
             # Match the detected faces with the trained model
             if len(faces) == 1:
                 print(">>> Someone is out there!")
-                otherFace()
+                #otherFace()
                 isBoss = False
                 for (x, y, w, h) in faces:
                     face = frame[y:y+h, x:x+w]
@@ -94,8 +95,12 @@ def detect_faces_from_camera_video_stream(exec_time=60):
                                         
                                 if not isSamePeople:
                                     print(">>> Aha, it's %s!" % name)
-                                    subprocess.Popen(["espeak", "hello {}, have a nice day".format(name)])
-                                    
+                                    #subprocess.Popen(["espeak", "hello {}, have a nice day".format(name)])
+                                    subprocess.Popen(["flite", "-t", "hello {}, have a nice day".format(name)])
+                                else:
+                                    i = random.randint(0,len(sayHello)-1)
+                                    #subprocess.Popen(["espeak", "{}".format(sayHello[i])])
+                                    subprocess.Popen(["flite","-t", "{}".format(sayHello[i])])
                                 break
             elif len(faces) > 1:
                 print("Too many people here, I am going to die!")
@@ -129,7 +134,8 @@ def playAlert():
 def otherFace():
     array=["Hello","How are you","Good luck"]
     randomValue = random.randint(0,len(array)-1)
-    subprocess.Popen(["espeak", "{}".format(array[randomValue])])
+    #subprocess.Popen(["espeak", "{}".format(array[randomValue])])
+    subprocess.Popen(["flite","-t", "{}".format(array[randomValue])])
 
 if __name__ == '__main__':
     # Parse the command line arguments
