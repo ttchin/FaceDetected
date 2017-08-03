@@ -47,6 +47,7 @@ def detect_faces_from_camera_video_stream(exec_time=60):
     detected_name = "World"
     bossName = "Leo"
     alert_interval = 20
+    alert_start = 0
 
     while True:
         if time.time() - exec_start > exec_time:
@@ -80,8 +81,6 @@ def detect_faces_from_camera_video_stream(exec_time=60):
                             if label == index:
                                 print(">>> Aha, it's %s!" % name)
                                 detected_name = name
-                                alert_interval = 20
-                                alert_start = 0
                                 if detected_name == bossName and alert_num < 3 and time.time() - alert_start > alert_interval:
                                     alert_start = time.time()
                                     playAlert()
@@ -106,7 +105,8 @@ def detect_faces_from_camera_video_stream(exec_time=60):
     cap.release()
 
 def playAlert():
-    print("Boss is comming, Alert!!!")
+    print(">>> Boss is comming, Alert!!!")
+    print("\n")
     # pygame.init()
     pygame.mixer.init()
     # screen = pygame.display.set_mode([640, 480])
