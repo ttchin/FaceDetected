@@ -6,11 +6,13 @@ import pygame
 from FaceTrain import Model
 import cv2
 import subprocess
+import random
 
 
 face_cascade = cv2.CascadeClassifier('opencv_config/haarcascade_frontalface_default.xml')
 model = Model()
 model.load()
+alert_track = 1
 
 def detect_faces_from_picture(pic_file_path):
     print(">>> Let me check this picture: " + pic_file_path)
@@ -31,11 +33,9 @@ def detect_faces_from_picture(pic_file_path):
                 if result == index:
                     print(">>> Aha, it's %s!" % name)
 
-is_playAlert = False
-
 def detect_faces_from_camera_video_stream(exec_time=60):
     # Perform the detection every n seconds
-    detect_interval = 1
+    detect_interval = 2
 
     cap = cv2.VideoCapture(0)
     exec_start = time.time()
@@ -43,12 +43,12 @@ def detect_faces_from_camera_video_stream(exec_time=60):
 
     # For calculation of FPS (frame per second)
     frame_num = 0
-    alert_num = 0
 
     detected_name = "World"
     bossName = "Leo"
     alert_interval = 20
     alert_start = 0
+
 
     while True:
         if time.time() - exec_start > exec_time:
@@ -69,6 +69,7 @@ def detect_faces_from_camera_video_stream(exec_time=60):
             # Match the detected faces with the trained model
             if len(faces) == 1:
                 print(">>> Someone is out there!")
+                otherFace()
                 isBoss = False
                 for (x, y, w, h) in faces:
                     face = frame[y:y+h, x:x+w]
@@ -80,15 +81,21 @@ def detect_faces_from_camera_video_stream(exec_time=60):
                     if probe > 0.95:
                         for index, name in model.getTrainCfg():
                             if label == index:
-                                print(">>> Aha, it's %s!" % name)
-                                if not detected_name == name:
-                                    detected_name = name
-                                    if detected_name == bossName and alert_num < 3 and time.time() - alert_start > alert_interval:
+                                if name == detected_name:
+                                    isSamePeople = True
+                                else:
+                                    isSamePeople = False
+                                
+                                detected_name = name
+                                
+                                if detected_name == bossName and time.time() - alert_start > alert_interval:
                                         alert_start = time.time()
                                         playAlert()
-                                        alert_num += 1
-                                    else:
-                                        subprocess.Popen(["espeak", "hello {}, have a nice day".format(name)])
+                                        
+                                if not isSamePeople:
+                                    print(">>> Aha, it's %s!" % name)
+                                    subprocess.Popen(["espeak", "hello {}, have a nice day".format(name)])
+                                    
                                 break
             elif len(faces) > 1:
                 print("Too many people here, I am going to die!")
@@ -109,14 +116,20 @@ def detect_faces_from_camera_video_stream(exec_time=60):
     cap.release()
 
 def playAlert():
+    global alert_track
     print(">>> Boss is comming, Alert!!!")
     print("\n")
-    # pygame.init()
+    array=["./dialog/boss-ye.wav","./dialog/leo.wav", "./dialog/clark.wav"]
     pygame.mixer.init()
-    # screen = pygame.display.set_mode([640, 480])
-    pygame.time.delay(2000)
-    pygame.mixer.music.load("./dialog/4239.wav")
+    # pygame.time.delay(2000)
+    pygame.mixer.music.load(array[(alert_track%3) - 1])
     pygame.mixer.music.play()
+    alert_track += 1
+
+def otherFace():
+    array=["Hello","How are you","Good luck"]
+    randomValue = random.randint(0,len(array)-1)
+    subprocess.Popen(["espeak", "{}".format(array[randomValue])])
 
 if __name__ == '__main__':
     # Parse the command line arguments
