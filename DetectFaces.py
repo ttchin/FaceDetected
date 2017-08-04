@@ -13,7 +13,7 @@ face_cascade = cv2.CascadeClassifier('opencv_config/haarcascade_frontalface_defa
 model = Model()
 model.load()
 alert_track = 1
-sayHello=["Do you remember me", "I am trying to remember your name", "I think you are super star", "You looks great today", "I like your eyes", "God bless you", "Do you have free style"]
+sayHello=["Do you remember me", "You are super star", "You looks great today", "I like your eyes", "God bless you", "Do you have free style", "You are so handsome", "You jump I jump", "kiss me baby", "We are Ericsson"]
 
 def detect_faces_from_picture(pic_file_path):
     print(">>> Let me check this picture: " + pic_file_path)
@@ -46,15 +46,14 @@ def detect_faces_from_camera_video_stream(exec_time=60):
     frame_num = 0
 
     detected_name = "World"
-    bossName = "Zhentao"
-    alert_interval = 20
+    bossName = "Clark"
+    alert_interval = 10
     alert_start = 0
     hello_text = ''
 
     while True:
         if time.time() - exec_start > exec_time:
             break
-
         # Capture frame-by-frame
         _, frame = cap.read()
         frame_num += 1
@@ -92,10 +91,12 @@ def detect_faces_from_camera_video_stream(exec_time=60):
                                     
                             print(">>> Aha, it's %s!" % name)
                             
-                            hello_text = "{}, {}".format(name, sayHello[i])
-                            print(hello_text)
-                            
-                            subprocess.Popen(["flite", "-t", hello_text])
+                            if not detected_name == bossName:
+                                hello_text = "{}, {}".format(name, sayHello[i])
+                                print(hello_text)
+                                subprocess.Popen(["flite", "-t", hello_text])
+                            else:
+                                hello_text = "WARING: Boss coming!!!"
                             
                             break
                 else:
@@ -130,7 +131,9 @@ def playAlert():
     pygame.mixer.init()
     # pygame.time.delay(2000)
     pygame.mixer.music.load(array[(alert_track%3) - 1])
+    pygame.mixer.music.set_volume(1.0)
     pygame.mixer.music.play()
+    print("volume %f" % pygame.mixer.music.get_volume())
     alert_track += 1
 
 def otherFace():
