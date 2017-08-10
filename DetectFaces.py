@@ -33,7 +33,7 @@ def detect_faces_from_picture(pic_file_path):
                 if result == index:
                     print(">>> Aha, it's %s!" % name)
 
-def detect_faces_from_camera_video_stream(exec_time=60, isAlarm=True):
+def detect_faces_from_camera_video_stream(exec_time=60, isAlarm=True, expectedName=None):
     # Perform the detection every n seconds
     detect_interval = 2
 
@@ -43,6 +43,9 @@ def detect_faces_from_camera_video_stream(exec_time=60, isAlarm=True):
 
     # For calculation of FPS (frame per second)
     frame_num = 0
+
+    detectExpectedFaceCount = 0
+    detectFaceCount = 0
 
     detected_name = "World"
     bossName = "Clark"
@@ -77,9 +80,14 @@ def detect_faces_from_camera_video_stream(exec_time=60, isAlarm=True):
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
                 label,probe = model.predict(face)
+                
+
+                 
+
                 i = random.randint(0,len(sayHello)-1)
                 
                 if probe > 0.95:
+                    detectFaceCount += 1
                     for index, name in model.getTrainCfg():
                         if label == index:
                             detected_name = name
@@ -90,6 +98,11 @@ def detect_faces_from_camera_video_stream(exec_time=60, isAlarm=True):
                                         playAlert()
                                     
                             print(">>> Aha, it's %s!" % name)
+                            if expectedName != None:
+                                print(">>> expectedName %s!" % expectedName)
+                                if name == expectedName:
+                                    detectExpectedFaceCount += 1
+                                print(">>> The accurate rate of detect correct face : {0:8.2f}%".format(detectExpectedFaceCount/detectFaceCount*100))  
                             
                             if not detected_name == bossName:
                                 hello_text = "{}, {}".format(name, sayHello[i])
@@ -152,11 +165,12 @@ if __name__ == '__main__':
     parser.add_argument('-t', type=int, help='the execution time to detect faces from the camera video stream. Default: 60 seconds')
     parser.set_defaults(t=60)
     parser.add_argument('--alarm', dest='alarm', default=False, help='Alarm when detecting the boss')
+    parser.add_argument('--name', dest='name', help='Specify the expected name of the face to calculate the accurateness')
     
     args = parser.parse_args()
-    print(args.alarm)
+    
     # Start detecting
     if args.p == None:
-        detect_faces_from_camera_video_stream(args.t,args.alarm)
+        detect_faces_from_camera_video_stream(args.t, args.alarm, args.name)
     else:
         detect_faces_from_picture(args.p)
