@@ -8,7 +8,7 @@ import cv2
 import subprocess
 import random
 
-
+isAlarm = False
 face_cascade = cv2.CascadeClassifier('opencv_config/haarcascade_frontalface_default.xml')
 model = Model()
 model.load()
@@ -33,7 +33,7 @@ def detect_faces_from_picture(pic_file_path):
                 if result == index:
                     print(">>> Aha, it's %s!" % name)
 
-def detect_faces_from_camera_video_stream(exec_time=60, isAlarm=True, expectedName=None):
+def detect_faces_from_camera_video_stream(exec_time=60, expectedName=None, bossName='Boss'):
     # Perform the detection every n seconds
     detect_interval = 2
 
@@ -48,7 +48,6 @@ def detect_faces_from_camera_video_stream(exec_time=60, isAlarm=True, expectedNa
     detectFaceCount = 0
 
     detected_name = "World"
-    bossName = "Clark"
     alert_interval = 10
     alert_start = 0
     hello_text = ''
@@ -94,12 +93,11 @@ def detect_faces_from_camera_video_stream(exec_time=60, isAlarm=True, expectedNa
                             
                             if detected_name == bossName and time.time() - alert_start > alert_interval:
                                     alert_start = time.time()
-                                    if isAlarm:
-                                        playAlert()
+                                    playAlert()
                                     
                             print(">>> Aha, it's %s!" % name)
                             if expectedName != None:
-                                print(">>> expectedName %s!" % expectedName)
+                                print(">>> expectedName {0}}!".format(expectedName))
                                 if name == expectedName:
                                     detectExpectedFaceCount += 1
                                 print(">>> The accurate rate of detect correct face : {0:8.2f}%".format(detectExpectedFaceCount/detectFaceCount*100))  
@@ -107,8 +105,7 @@ def detect_faces_from_camera_video_stream(exec_time=60, isAlarm=True, expectedNa
                             if not detected_name == bossName:
                                 hello_text = "{}, {}".format(name, sayHello[i])
                                 print(hello_text)
-                                if isAlarm:
-                                    subprocess.Popen(["flite", "-t", hello_text])
+                                playFlite(hello_text)
                             else:
                                 hello_text = "WARING: Boss coming!!!"
                             
@@ -119,9 +116,7 @@ def detect_faces_from_camera_video_stream(exec_time=60, isAlarm=True, expectedNa
                     
                     hello_text = array[i]
                     print(hello_text)
-                    
-                    if isAlarm:
-                        subprocess.Popen(["flite","-t", hello_text])
+                    playFlite(hello_text)
                 
         # Display the camero video
         cv2.putText(frame, "Press 'q' to quit", (20, 40),
@@ -136,17 +131,25 @@ def detect_faces_from_camera_video_stream(exec_time=60, isAlarm=True, expectedNa
 
     cap.release()
 
+
 def playAlert():
-    global alert_track
-    print(">>> Boss is comming, Alert!!!")
-    print("\n")
-    array=["./dialog/boss-ye.wav","./dialog/leo.wav", "./dialog/clark.wav"]
-    pygame.mixer.init()
-    pygame.mixer.music.load(array[(alert_track%3) - 1])
-    pygame.mixer.music.set_volume(1.0)
-    pygame.mixer.music.play()
-    print("volume %f" % pygame.mixer.music.get_volume())
-    alert_track += 1
+    if isAlarm:
+        global alert_track
+        print(">>> Boss is comming, Alert!!!")
+        print("\n")
+        array=["./dialog/boss-ye.wav","./dialog/leo.wav", "./dialog/clark.wav"]
+        pygame.mixer.init()
+        pygame.mixer.music.load(array[(alert_track%3) - 1])
+        pygame.mixer.music.set_volume(1.0)
+        pygame.mixer.music.play()
+        print("volume %f" % pygame.mixer.music.get_volume())
+        alert_track += 1
+
+
+def playFlite(text):
+    if isAlarm:
+        subprocess.Popen(["flite", "-t", text])
+
 
 def otherFace():
     array=["Hello","How are you","Good luck", "Hahaha", "Good afternoon", "Hey hey", "Lu lu lu", "Sa wa di ka", "Ah yi xi", "Ka wa yi","kou ni qi wa"]
@@ -154,9 +157,7 @@ def otherFace():
     
     hello_text = "{}, {}".format(name, sayHello[i])
     print(hello_text)
-    
-    if isAlarm:
-        subprocess.Popen(["flite","-t", "{}".format(array[randomValue])])
+    playFlite("{}".format(array[randomValue]))
 
 if __name__ == '__main__':
     # Parse the command line arguments
@@ -166,11 +167,13 @@ if __name__ == '__main__':
     parser.set_defaults(t=60)
     parser.add_argument('--alarm', dest='alarm', default=False, help='Alarm when detecting the boss')
     parser.add_argument('--name', dest='name', help='Specify the expected name of the face to calculate the accurateness')
+    parser.add_argument('--boss', dest='boss', help='Specify the boss name for sound alarm!')
     
     args = parser.parse_args()
+    isAlarm = args.alarm
     
     # Start detecting
     if args.p == None:
-        detect_faces_from_camera_video_stream(args.t, args.alarm, args.name)
+        detect_faces_from_camera_video_stream(args.t, args.name, args.boss)
     else:
         detect_faces_from_picture(args.p)
