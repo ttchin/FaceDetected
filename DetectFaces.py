@@ -22,7 +22,6 @@ def detect_faces_from_picture(pic_file_path):
     # Detect faces in the frame
     gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray_frame, 1.3, 5)
-    #faces = face_cascade.detectMultiScale(gray_frame, scaleFactor=1.2, minNeighbors=3, minSize=(10, 10))
     
     # Match the detected faces with the trained model
     if len(faces) > 0:
@@ -34,7 +33,7 @@ def detect_faces_from_picture(pic_file_path):
                 if result == index:
                     print(">>> Aha, it's %s!" % name)
 
-def detect_faces_from_camera_video_stream(exec_time=60):
+def detect_faces_from_camera_video_stream(exec_time=60, isAlarm=True):
     # Perform the detection every n seconds
     detect_interval = 2
 
@@ -87,14 +86,16 @@ def detect_faces_from_camera_video_stream(exec_time=60):
                             
                             if detected_name == bossName and time.time() - alert_start > alert_interval:
                                     alert_start = time.time()
-                                    playAlert()
+                                    if isAlarm:
+                                        playAlert()
                                     
                             print(">>> Aha, it's %s!" % name)
                             
                             if not detected_name == bossName:
                                 hello_text = "{}, {}".format(name, sayHello[i])
                                 print(hello_text)
-                                subprocess.Popen(["flite", "-t", hello_text])
+                                if isAlarm:
+                                    subprocess.Popen(["flite", "-t", hello_text])
                             else:
                                 hello_text = "WARING: Boss coming!!!"
                             
@@ -106,14 +107,13 @@ def detect_faces_from_camera_video_stream(exec_time=60):
                     hello_text = array[i]
                     print(hello_text)
                     
-                    #subprocess.Popen(["espeak", "{}".format(array[randomValue])])
-                    subprocess.Popen(["flite","-t", hello_text])
+                    if isAlarm:
+                        subprocess.Popen(["flite","-t", hello_text])
                 
         # Display the camero video
         cv2.putText(frame, "Press 'q' to quit", (20, 40),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
         cv2.putText(frame, hello_text, (20, 80), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
-        #cv2.putText(frame, ("Hello, %s!" % detected_name), (20, 120), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
         cv2.imshow('Camera', frame)
         
         # Wait for 'q' on the Camera window to quit before entire capturing job finished
@@ -129,7 +129,6 @@ def playAlert():
     print("\n")
     array=["./dialog/boss-ye.wav","./dialog/leo.wav", "./dialog/clark.wav"]
     pygame.mixer.init()
-    # pygame.time.delay(2000)
     pygame.mixer.music.load(array[(alert_track%3) - 1])
     pygame.mixer.music.set_volume(1.0)
     pygame.mixer.music.play()
@@ -143,8 +142,8 @@ def otherFace():
     hello_text = "{}, {}".format(name, sayHello[i])
     print(hello_text)
     
-    #subprocess.Popen(["espeak", "{}".format(array[randomValue])])
-    subprocess.Popen(["flite","-t", "{}".format(array[randomValue])])
+    if isAlarm:
+        subprocess.Popen(["flite","-t", "{}".format(array[randomValue])])
 
 if __name__ == '__main__':
     # Parse the command line arguments
@@ -152,10 +151,12 @@ if __name__ == '__main__':
     parser.add_argument('-p', type=str, help='the path of picture to detect faces')
     parser.add_argument('-t', type=int, help='the execution time to detect faces from the camera video stream. Default: 60 seconds')
     parser.set_defaults(t=60)
+    parser.add_argument('--alarm', dest='alarm', default=False, help='Alarm when detecting the boss')
+    
     args = parser.parse_args()
-
+    print(args.alarm)
     # Start detecting
     if args.p == None:
-        detect_faces_from_camera_video_stream(args.t)
+        detect_faces_from_camera_video_stream(args.t,args.alarm)
     else:
         detect_faces_from_picture(args.p)
