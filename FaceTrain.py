@@ -33,16 +33,11 @@ class Dataset(object):
         # numpy.reshape
         X_train, X_test, y_train, y_test = train_test_split(images, labels, test_size=0.3, random_state=random.randint(0, 100))
         X_valid, X_test, y_valid, y_test = train_test_split(images, labels, test_size=0.5, random_state=random.randint(0, 100))
-        if K.image_dim_ordering() == 'th':
-            X_train = X_train.reshape(X_train.shape[0], 3, img_rows, img_cols)
-            X_valid = X_valid.reshape(X_valid.shape[0], 3, img_rows, img_cols)
-            X_test = X_test.reshape(X_test.shape[0], 3, img_rows, img_cols)
-            input_shape = (3, img_rows, img_cols)
-        else:
-            X_train = X_train.reshape(X_train.shape[0], img_rows, img_cols, 3)
-            X_valid = X_valid.reshape(X_valid.shape[0], img_rows, img_cols, 3)
-            X_test = X_test.reshape(X_test.shape[0], img_rows, img_cols, 3)
-            input_shape = (img_rows, img_cols, 3)
+        
+        X_train = X_train.reshape(X_train.shape[0], img_rows, img_cols, 3)
+        X_valid = X_valid.reshape(X_valid.shape[0], img_rows, img_cols, 3)
+        X_test = X_test.reshape(X_test.shape[0], img_rows, img_cols, 3)
+        input_shape = (img_rows, img_cols, 3)
 
         # the data, shuffled and split between train and test sets
         print('X_train shape:', X_train.shape)
@@ -85,7 +80,7 @@ class Model(object):
                 filters=32,
                 kernel_size=(5, 5),
                 padding='same',
-                dim_ordering='th',
+                dim_ordering='tf',
                 input_shape=self.dataset.X_train.shape[1:]
             )
         )
@@ -166,10 +161,7 @@ class Model(object):
         self.model = load_model(file_path)
 
     def predict(self, image):
-        if K.image_dim_ordering() == 'th' and image.shape != (1, 3, IMAGE_SIZE, IMAGE_SIZE):
-            image = resize_with_pad(image)
-            image = image.reshape((1, 3, IMAGE_SIZE, IMAGE_SIZE))
-        elif K.image_dim_ordering() == 'tf' and image.shape != (1, IMAGE_SIZE, IMAGE_SIZE, 3):
+        if K.image_dim_ordering() == 'tf' and image.shape != (1, IMAGE_SIZE, IMAGE_SIZE, 3):
             image = resize_with_pad(image)
             image = image.reshape((1, IMAGE_SIZE, IMAGE_SIZE, 3))
         image = image.astype('float32')
