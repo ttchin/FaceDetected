@@ -13,6 +13,7 @@ from keras.optimizers import SGD
 from keras.utils import np_utils
 from keras.models import load_model
 from keras import backend as K
+from keras.utils import plot_model
 
 from FaceInput import extract_data, resize_with_pad, IMAGE_SIZE
 import os
@@ -109,7 +110,9 @@ class Model(object):
         self.model.add(Activation('softmax'))
         self.model.summary()
 
-    def train(self, dataset, batch_size=20, nb_epoch=7, data_augmentation=True):
+        plot_model(self.model, to_file='./model/model.png')
+
+    def train(self, dataset, batch_size=20, nb_epoch=1, data_augmentation=True):
         self.model.compile(
             optimizer='adam',  #有很多可选的optimizer，例如RMSprop,Adagrad，你也可以试试哪个好，我个人感觉差异不大
             loss='categorical_crossentropy',  #你可以选用squared_hinge作为loss看看哪个好
@@ -204,6 +207,7 @@ if __name__ == '__main__':
     model.build_model(dataset,count)
     model.train(dataset, data_augmentation=False)
     model.save()
+    
 
     model = Model()
     model.load()
