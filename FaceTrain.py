@@ -1,5 +1,5 @@
 #! encoding: UTF-8
-
+#%%
 from __future__ import print_function
 import random
 
@@ -110,7 +110,6 @@ class Model(object):
         self.model.add(Activation('softmax'))
         self.model.summary()
 
-        plot_model(self.model, to_file='./model/model.png')
 
     def train(self, dataset, batch_size=20, nb_epoch=1, data_augmentation=True):
         self.model.compile(

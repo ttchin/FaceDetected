@@ -24,8 +24,6 @@ A project based on tensor flow running on Raspberry that can detect face.
 1. `pip install sklearn`
 1. `pip install pygame`
 1. `pip install tensorflow`
-1. `pip install pydot`
-1. `pip install graphviz`
 
 ### In raspberry, opencv only works on python 3.4**
 
