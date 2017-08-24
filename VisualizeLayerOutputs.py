@@ -19,26 +19,28 @@ def visualizeLayer(pic):
 
     model = Model()
     model.load()
- 
-    intermediate_layer_model = M(inputs=model.model.input,
-                                    outputs=model.model.get_layer("1").output)
-    intermediate_output = intermediate_layer_model.predict(batch)
-    layer_output = intermediate_output
+    # print(model.model.layers)
+    for layer in model.model.layers:
+        layerName = layer.get_config().get('name')
+        print("Output layer : {}".format(layerName))
+        intermediate_layer_model = M(inputs=model.model.input,
+                                        outputs=model.model.get_layer(layerName).output)
+        intermediate_output = intermediate_layer_model.predict(batch)
+        layer_output = intermediate_output
 
-    print("layer_output: {}".format(layer_output.shape))
-    
-    pic = np.squeeze(layer_output, axis=0)
-    print("shape after squeeze: {}".format(pic[:,:,0].shape))
-    pic_no = pic.shape[2]
-    for i in range(pic_no):
-        print(i)
-        output_img = pic[:,:,i]
-        output_img *=255
-        # print(output_img)
-        plt.imshow(output_img)
-        cv2.imwrite('./temp/{}.jpg'.format(i), output_img)
-
-
+        print("layer_output: {}".format(layer_output.shape))
+        
+        if(len(layer_output.shape) == 4):
+            pic = np.squeeze(layer_output, axis=0)
+            print("shape after squeeze: {}".format(pic[:,:,0].shape))
+            pic_no = pic.shape[2]
+            for i in range(pic_no):
+                # print(i)
+                output_img = pic[:,:,i]
+                output_img *=255
+                # print(output_img)
+                # plt.imshow(output_img)
+                cv2.imwrite('./temp/{}_{}.jpg'.format(layerName,i), output_img)
 
 
 if __name__ == '__main__':
