@@ -1,7 +1,6 @@
 #%%
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
 from keras import backend as K
 from keras.models import Sequential
 from keras.models import Model as M
@@ -39,7 +38,9 @@ def visualizeLayer(pic):
             name="3"
         )
     )
-
+    model.add(Convolution2D(filters=64, kernel_size=(3, 3), padding='same', name='4'))
+    model.add(Activation('relu',name='5'))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='same',name='6'))
     model.add(Flatten(name='7'))
     model.add(Dense(512,name="8"))
     model.add(Activation('relu',name='9'))
