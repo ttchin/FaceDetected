@@ -97,7 +97,7 @@ def detect_faces_from_camera_video_stream(exec_time=60, expectedName=None, bossN
                                     
                             print(">>> Aha, it's %s!" % name)
                             if expectedName != None:
-                                print(">>> expectedName {0}}!".format(expectedName))
+                                print(">>> expectedName {0}!".format(expectedName))
                                 if name == expectedName:
                                     detectExpectedFaceCount += 1
                                 print(">>> The accurate rate of detect correct face : {0:8.2f}%".format(detectExpectedFaceCount/detectFaceCount*100))  

@@ -142,6 +142,7 @@ Temporary Items
 .apdisk
 
 *.jpg
+*.bmp
 *.png
 *.db
 *.cfg
