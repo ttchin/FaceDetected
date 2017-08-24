@@ -82,32 +82,34 @@ class Model(object):
                 kernel_size=(5, 5),
                 padding='same',
                 dim_ordering='tf',
-                input_shape=(IMAGE_SIZE, IMAGE_SIZE, 3)
+                input_shape=(IMAGE_SIZE, IMAGE_SIZE, 3),
+                name="1"
             )
         )
 
-        self.model.add(Activation('relu'))
+        self.model.add(Activation('relu',name="2"))
         self.model.add(
             MaxPooling2D(
                 pool_size=(2, 2),
                 strides=(2, 2),
-                padding='same'
+                padding='same',
+                name="3"
             )
         )
         
 
-        self.model.add(Convolution2D(filters=64, kernel_size=(5, 5), padding='same'))
-        self.model.add(Activation('relu'))
-        self.model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='same'))
+        self.model.add(Convolution2D(filters=64, kernel_size=(5, 5), padding='same', name='4'))
+        self.model.add(Activation('relu',name='5'))
+        self.model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='same',name='6'))
         
 
-        self.model.add(Flatten())
-        self.model.add(Dense(512))
-        self.model.add(Activation('relu'))
+        self.model.add(Flatten(name='7'))
+        self.model.add(Dense(512,name="8"))
+        self.model.add(Activation('relu',name='9'))
         
 
-        self.model.add(Dense(nb_classes))
-        self.model.add(Activation('softmax'))
+        self.model.add(Dense(nb_classes,name='10'))
+        self.model.add(Activation('softmax',name='11'))
         self.model.summary()
 
 
