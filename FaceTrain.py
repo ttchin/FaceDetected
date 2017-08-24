@@ -73,16 +73,16 @@ class Model(object):
     def __init__(self):
         self.model = None
 
-    def build_model(self, dataset, nb_classes):
+    def build_model(self, nb_classes):
         self.model = Sequential()
-        self.dataset = dataset
+        
         self.model.add(
             Convolution2D(
                 filters=32,
                 kernel_size=(5, 5),
                 padding='same',
                 dim_ordering='tf',
-                input_shape=self.dataset.X_train.shape[1:]
+                input_shape=(IMAGE_SIZE, IMAGE_SIZE, 3)
             )
         )
 
@@ -112,6 +112,7 @@ class Model(object):
 
 
     def train(self, dataset, batch_size=20, nb_epoch=1, data_augmentation=True):
+        self.dataset = dataset
         self.model.compile(
             optimizer='adam',  #有很多可选的optimizer，例如RMSprop,Adagrad，你也可以试试哪个好，我个人感觉差异不大
             loss='categorical_crossentropy',  #你可以选用squared_hinge作为loss看看哪个好
@@ -203,7 +204,7 @@ if __name__ == '__main__':
     dataset.read(count)
 
     model = Model()
-    model.build_model(dataset,count)
+    model.build_model(count)
     model.train(dataset, data_augmentation=False)
     model.save()
     
@@ -212,3 +213,4 @@ if __name__ == '__main__':
     model.load()
     model.evaluate(dataset)
     model.generateTrainCfg()
+    print("Model training completed.")
