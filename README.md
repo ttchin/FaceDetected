@@ -25,13 +25,16 @@ A project based on tensor flow running on Raspberry that can detect face.
 1. `pip install pygame`
 1. `pip install tensorflow`
 
-### In raspberry, opencv only works on python 3.4**
+### In raspberry, opencv only works on python 3.4
 
 1. For opencv:<http://www.pyimagesearch.com/2016/04/18/install-guide-raspberry-pi-3-raspbian-jessie-opencv-3/>
 
 1. For tensorflow:<https://github.com/samjabrahams/tensorflow-on-raspberry-pi>
 
 1. For keras:<https://github.com/bitschift/brew.ai/wiki/Setting-up-the-Pi>
+
+1. If you got an error like `Error (-215) size.width>0 && size.height>0 occurred` when attempting to display an image using OpenCV,
+you can access the camera board on /dev/video0 by running the command: sudo modprobe bcm2835-v4l2 This will have to be run on every boot of the device. Or you can put modprobe bcm2835-v4l2 in /etc/rc.local to make it run on every boot automatically.
 
 ## Prepare images
 
