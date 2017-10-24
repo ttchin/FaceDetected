@@ -38,6 +38,8 @@ you can access the camera board on /dev/video0 by running the command: sudo modp
 
 ## Prepare images
 
+* Run `python3.4 ` in raspberry.
+
 ### Capture pictures and crop faces from the camera video stream
 
 * e.g. `python CapturePictures.py -n 50`
